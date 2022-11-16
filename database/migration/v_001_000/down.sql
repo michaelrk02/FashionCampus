@@ -1,0 +1,14 @@
+DROP TABLE "order_item";
+DROP TABLE "order";
+DROP TABLE "cart_item";
+DROP TABLE "buyer";
+DROP TABLE "product_image";
+DROP TABLE "product";
+DROP TABLE "category";
+DROP TABLE "seller";
+DROP TABLE "user";
+
+DROP TYPE USER_TYPE;
+DROP TYPE PRODUCT_SIZE;
+DROP TYPE PRODUCT_CONDITION;
+DROP TYPE SHIPPING_METHOD;
