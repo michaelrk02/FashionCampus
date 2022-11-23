@@ -9,6 +9,7 @@ CREATE TABLE "user" (
     "email" VARCHAR(254) NOT NULL,
     "password_hash" CHAR(64) NOT NULL,
     "password_salt" CHAR(16) NOT NULL,
+    "phone_number" VARCHAR(24) NOT NULL,
     "type" USER_TYPE NOT NULL,
 
     CONSTRAINT "PK_User" PRIMARY KEY ("id")
@@ -25,6 +26,7 @@ CREATE TABLE "seller" (
 CREATE TABLE "category" (
     "id" UUID NOT NULL DEFAULT UUID_GENERATE_V4(),
     "name" VARCHAR(128) NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT "PK_Category" PRIMARY KEY ("id")
 );
@@ -37,6 +39,7 @@ CREATE TABLE "product" (
     "description" TEXT NOT NULL,
     "condition" PRODUCT_CONDITION NOT NULL,
     "price" INT NOT NULL,
+    "is_deleted" BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT "PK_Product" PRIMARY KEY ("id"),
     CONSTRAINT "FK_Product_Seller" FOREIGN KEY ("seller_id") REFERENCES "seller" ("user_id"),
@@ -79,8 +82,10 @@ CREATE TABLE "order" (
     "id" UUID NOT NULL DEFAULT UUID_GENERATE_V4(),
     "buyer_id" UUID NOT NULL,
     "created_at" TIMESTAMP NOT NULL DEFAULT NOW(),
+    "gross" INT NOT NULL,
     "shipping_method" SHIPPING_METHOD NOT NULL,
     "shipping_address" JSON NOT NULL,
+    "shipping_price" INT NOT NULL,
     "total" INT NOT NULL,
 
     CONSTRAINT "PK_Order" PRIMARY KEY ("id"),

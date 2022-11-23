@@ -51,8 +51,10 @@ sellers = db.query(Seller).all()
 categories = db.query(Category).all()
 
 for s in sellers:
-    create_product(db, s.user_id, random.choice(categories).id, False)
-    for _ in range(7):
+    for _ in range(2):
+        create_product(db, s.user_id, random.choice(categories).id, False)
+
+    for _ in range(6):
         create_product(db, s.user_id, random.choice(categories).id, True)
 
 #
@@ -65,9 +67,10 @@ buyers = db.query(Buyer).all()
 products = db.query(Product).all()
 
 for b in buyers:
-    add_to_cart(db, b.user_id, random.choice(products).id)
+    for _ in range(random.randint(1, 5)):
+        add_to_cart(db, b.user_id, random.choice(products).id)
 
-    for _ in range(1, 10):
+    for _ in range(random.randint(1, 10)):
         create_order(db, b.user_id, [p.id for p in random.sample(products, random.randint(1, 5))])
 
 print('Database seeding completed')

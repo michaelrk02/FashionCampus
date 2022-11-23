@@ -1,0 +1,5 @@
+import FashionCampus.api.profile_page.user_details
+import FashionCampus.api.profile_page.change_shipping_address
+import FashionCampus.api.profile_page.topup_balance
+import FashionCampus.api.profile_page.get_user_balance
+import FashionCampus.api.profile_page.user_orders

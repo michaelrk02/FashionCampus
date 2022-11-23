@@ -1,0 +1,1 @@
+import FashionCampus.api.product_detail_page.get_product_details

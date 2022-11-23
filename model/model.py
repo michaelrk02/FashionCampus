@@ -4,21 +4,21 @@ from sqlalchemy.orm import declarative_base
 
 Model = declarative_base()
 
-class UserType(enum.Enum):
+class UserType(str, enum.Enum):
     seller = 'seller'
     buyer = 'buyer'
 
-class ProductSize(enum.Enum):
+class ProductSize(str, enum.Enum):
     s = 's'
     m = 'm'
     l = 'l'
     xl = 'xl'
 
-class ProductCondition(enum.Enum):
+class ProductCondition(str, enum.Enum):
     old = 'old'
     new = 'new'
 
-class ShippingMethod(enum.Enum):
+class ShippingMethod(str, enum.Enum):
     regular = 'regular'
     next_day = 'next_day'
 

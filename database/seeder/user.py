@@ -13,6 +13,7 @@ def create_user(db, type):
         email = fake.safe_email(),
         password_hash = password_hash,
         password_salt = password_salt,
+        phone_number = fake.phone_number(),
         type = type
     )
 
