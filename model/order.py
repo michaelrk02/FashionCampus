@@ -18,7 +18,7 @@ class CartItem(Model):
     product = relationship('Product')
 
     __table_args__ = (
-        UniqueConstraint('buyer_id', 'product_id'),
+        UniqueConstraint('buyer_id', 'product_id', 'details_size'),
     )
 
 class Order(Model):
@@ -39,11 +39,16 @@ class Order(Model):
 class OrderItem(Model):
     __tablename__ = 'order_item'
 
-    order_id = Column('order_id', String(36), ForeignKey('order.id'), primary_key = True, autoincrement = False)
-    product_id = Column('product_id', String(36), ForeignKey('product.id'), primary_key = True, autoincrement = False)
+    id = Column('id', String(36), primary_key = True, autoincrement = False, server_default = FetchedValue())
+    order_id = Column('order_id', String(36), ForeignKey('order.id'), nullable = False)
+    product_id = Column('product_id', String(36), ForeignKey('product.id'), nullable = False)
     details_quantity = Column('details_quantity', Integer, nullable = False)
     details_size = Column('details_size', Enum(ProductSize), nullable = False)
     product_price = Column('product_price', Integer, nullable = False)
 
     order = relationship('Order', back_populates = 'items')
     product = relationship('Product')
+
+    __table_args__ = (
+        UniqueConstraint('order_id', 'product_id', 'details_size'),
+    )

@@ -11,3 +11,7 @@ seed:
 .PHONY : logs
 logs:
 	docker-compose logs fashion-campus-api
+
+.PHONY : test
+test:
+	docker-compose exec fashion-campus-api python -m FashionCampus.nn.test

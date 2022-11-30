@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String, Text
+from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.schema import FetchedValue
 from sqlalchemy.orm import relationship
 
@@ -19,6 +19,10 @@ class Product(Model):
     seller = relationship('Seller')
     category = relationship('Category')
     images = relationship('ProductImage')
+
+    __table_args__ = (
+        UniqueConstraint('name', 'category_id', 'condition'),
+    )
 
 class ProductImage(Model):
     __tablename__ = 'product_image'

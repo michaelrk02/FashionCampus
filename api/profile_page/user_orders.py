@@ -30,7 +30,7 @@ def profile_page_user_orders():
                 Product.name.label('product_name')
             ).
             join(OrderItem.product).
-            join(Product.images.and_(ProductImage.order == 1)).
+            join(Product.images.and_(ProductImage.order == 1), isouter = True).
             where(OrderItem.order_id == order.id)
         ).fetchall()
 

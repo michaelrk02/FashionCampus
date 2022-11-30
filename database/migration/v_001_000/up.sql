@@ -28,7 +28,8 @@ CREATE TABLE "category" (
     "name" VARCHAR(128) NOT NULL,
     "is_deleted" BOOLEAN NOT NULL DEFAULT FALSE,
 
-    CONSTRAINT "PK_Category" PRIMARY KEY ("id")
+    CONSTRAINT "PK_Category" PRIMARY KEY ("id"),
+    CONSTRAINT "UID_Category_Name" UNIQUE ("name")
 );
 
 CREATE TABLE "product" (
@@ -53,7 +54,8 @@ CREATE TABLE "product_image" (
     "path" TEXT NOT NULL,
 
     CONSTRAINT "PK_ProductImage" PRIMARY KEY ("product_id", "image_id"),
-    CONSTRAINT "FK_ProductImage_Product" FOREIGN KEY ("product_id") REFERENCES "product" ("id")
+    CONSTRAINT "FK_ProductImage_Product" FOREIGN KEY ("product_id") REFERENCES "product" ("id"),
+    CONSTRAINT "UID_ProductImage_ProductId_Order" UNIQUE ("product_id", "order")
 );
 
 CREATE TABLE "buyer" (
@@ -75,7 +77,7 @@ CREATE TABLE "cart_item" (
     CONSTRAINT "PK_CartItem" PRIMARY KEY ("id"),
     CONSTRAINT "FK_CartItem_Buyer" FOREIGN KEY ("buyer_id") REFERENCES "buyer" ("user_id"),
     CONSTRAINT "FK_CartItem_Product" FOREIGN KEY ("product_id") REFERENCES "product" ("id"),
-    CONSTRAINT "UK_CartItem_BuyerId_ProductId" UNIQUE ("buyer_id", "product_id")
+    CONSTRAINT "UID_CartItem_BuyerId_ProductId_DetailsSize" UNIQUE ("buyer_id", "product_id", "details_size")
 );
 
 CREATE TABLE "order" (
@@ -93,13 +95,15 @@ CREATE TABLE "order" (
 );
 
 CREATE TABLE "order_item" (
+    "id" UUID NOT NULL DEFAULT UUID_GENERATE_V4(),
     "order_id" UUID NOT NULL,
     "product_id" UUID NOT NULL,
     "details_quantity" INT NOT NULL,
     "details_size" PRODUCT_SIZE NOT NULL,
     "product_price" INT NOT NULL,
 
-    CONSTRAINT "PK_OrderItem" PRIMARY KEY ("order_id", "product_id"),
+    CONSTRAINT "PK_OrderItem" PRIMARY KEY ("id"),
     CONSTRAINT "FK_OrderItem_Order" FOREIGN KEY ("order_id") REFERENCES "order" ("id"),
-    CONSTRAINT "FK_OrderItem_Product" FOREIGN KEY ("product_id") REFERENCES "product" ("id")
+    CONSTRAINT "FK_OrderItem_Product" FOREIGN KEY ("product_id") REFERENCES "product" ("id"),
+    CONSTRAINT "UID_OrderItem_OrderId_ProductId_DetailsSize" UNIQUE ("order_id", "product_id", "details_size")
 );

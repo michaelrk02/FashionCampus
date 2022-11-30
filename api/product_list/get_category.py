@@ -11,7 +11,7 @@ from FashionCampus.api.blueprints import product_list
 def product_list_get_category():
     db = session()
 
-    categories = db.execute(select(Category).order_by(Category.name)).scalars()
+    categories = db.execute(select(Category).where(Category.is_deleted == False).order_by(Category.name)).scalars()
 
     return {
         'data': [

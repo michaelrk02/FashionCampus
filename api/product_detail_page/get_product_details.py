@@ -6,9 +6,9 @@ from FashionCampus.common import get_image_url
 from FashionCampus.database import session
 from FashionCampus.model import Category, Product, ProductImage
 
-from FashionCampus.api.blueprints import product_list
+from FashionCampus.api.blueprints import product_detail_page
 
-@product_list.route('/products/<product_id>', methods = ['GET'])
+@product_detail_page.route('/products/<product_id>', methods = ['GET'])
 def product_detail_page_get_product_details(product_id):
     db = session()
 

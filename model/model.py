@@ -23,4 +23,7 @@ class ShippingMethod(str, enum.Enum):
     next_day = 'next_day'
 
 def enum_describe(value):
-    return ' '.join(value.split('_')).capitalize()
+    return ' '.join(value.split('_'))
+
+def enum_make(value):
+    return '_'.join(value.split(' '))

@@ -1,0 +1,6 @@
+import FashionCampus.api.admin_page.get_orders
+import FashionCampus.api.admin_page.save_product
+import FashionCampus.api.admin_page.delete_product
+import FashionCampus.api.admin_page.save_category
+import FashionCampus.api.admin_page.delete_category
+import FashionCampus.api.admin_page.get_total_sales

@@ -1,1 +1,2 @@
 import FashionCampus.api.product_detail_page.get_product_details
+import FashionCampus.api.product_detail_page.add_to_cart

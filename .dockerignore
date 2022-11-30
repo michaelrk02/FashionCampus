@@ -4,3 +4,4 @@
 docker-compose.yaml
 
 database/storage/
+nn/data/

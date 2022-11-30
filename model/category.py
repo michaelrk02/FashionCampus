@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, String
+from sqlalchemy import Boolean, Column, String, UniqueConstraint
 from sqlalchemy.schema import FetchedValue
 
 from .model import Model
@@ -9,3 +9,7 @@ class Category(Model):
     id = Column('id', String(36), primary_key = True, autoincrement = False, server_default = FetchedValue())
     name = Column('name', String(128), nullable = False)
     is_deleted = Column('is_deleted', Boolean, nullable = False, server_default = FetchedValue())
+
+    __table_args__ = (
+        UniqueConstraint('name'),
+    )

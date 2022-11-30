@@ -20,7 +20,7 @@ def product_list_get_product_list():
     ). \
     select_from(Product). \
     join(Product.category.and_(Category.is_deleted == False)). \
-    join(Product.images.and_(ProductImage.order == 1)). \
+    join(Product.images.and_(ProductImage.order == 1), isouter = True). \
     where(Product.is_deleted == False)
 
     page = int(request.args.get('page', 1))
