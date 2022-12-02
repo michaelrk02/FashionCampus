@@ -3,12 +3,15 @@ import os
 import re
 import torch
 
+def load_image(path):
+  return cv2.imread(os.path.join(path))
+
 def load_images_from_folder(folder):
     images = []
     filenames = []
     for filename in os.listdir(folder):
         filenames.append(filename)
-        img = cv2.imread(os.path.join(folder,filename))
+        img = load_image(os.path.join(folder, filename))
         if img is not None:
             images.append(img)
         else:
@@ -38,7 +41,7 @@ def extract_label(filename):
 
 def output_label(label):
     output_mapping = {
-      0: "T-shirt/Top",
+      0: "T-shirt",
       1: "Trouser",
       2: "Pullover",
       3: "Dress",

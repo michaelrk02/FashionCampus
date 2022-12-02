@@ -1,0 +1,3 @@
+[submodule "smart-campus-template"]
+	path = smart-campus-template
+	url = git@gitlab.com:WilliamOnnyx/smart-campus-template.git

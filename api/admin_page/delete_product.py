@@ -1,9 +1,9 @@
 from flask import request
 
-from sqlalchemy import delete
+from sqlalchemy import delete, select
 
 from FashionCampus.database import session
-from FashionCampus.common import get_user
+from FashionCampus.common import get_user, delete_blob
 from FashionCampus.model import Product, ProductImage
 
 from FashionCampus.api.blueprints import admin_page
@@ -25,6 +25,10 @@ def admin_page_delete_product(product_id):
 
     if product.seller_id != user.id:
         return {'message': 'invalid seller'}, 403
+
+    images = db.execute(select(ProductImage).where(ProductImage.product_id == product_id)).scalars()
+    for image in images:
+        delete_blob(image.path)
 
     db.execute(delete(ProductImage).where(ProductImage.product_id == product_id))
     db.commit()

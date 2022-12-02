@@ -40,6 +40,7 @@ CREATE TABLE "product" (
     "description" TEXT NOT NULL,
     "condition" PRODUCT_CONDITION NOT NULL,
     "price" INT NOT NULL,
+    "created_at" TIMESTAMP NOT NULL DEFAULT NOW(),
     "is_deleted" BOOLEAN NOT NULL DEFAULT FALSE,
 
     CONSTRAINT "PK_Product" PRIMARY KEY ("id"),

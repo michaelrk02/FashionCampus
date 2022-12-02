@@ -15,6 +15,7 @@ services:
             APP_KEY: "${APP_KEY}"
             DATABASE_VERBOSE: "${DATABASE_VERBOSE}"
         volumes:
+            - "./blob:/app/FashionCampus/blob"
             - "./nn/data:/app/FashionCampus/nn/data"
         depends_on:
             - "fashion-campus-db"

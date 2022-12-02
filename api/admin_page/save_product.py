@@ -1,9 +1,12 @@
+import hashlib
+import re
+
 from flask import request
 
 from sqlalchemy import delete, select
 
 from FashionCampus.database import session
-from FashionCampus.common import get_user
+from FashionCampus.common import get_user, save_encoded_blob,delete_blob
 from FashionCampus.model import Category, Product, ProductCondition, ProductImage, enum_make
 
 from FashionCampus.api.blueprints import admin_page
@@ -30,6 +33,11 @@ def admin_page_save_product():
         if (product == None) or product.is_deleted:
             return {'message': 'product not found or has been deleted'}, 404
 
+        if product.seller_id != user.id:
+            return {'message': 'invalid seller'}, 403
+    else:
+        product = Product()
+
     product_name = request.json.get('product_name', '')
     description = request.json.get('description', '')
     images = request.json.get('images', [])
@@ -43,6 +51,8 @@ def admin_page_save_product():
     if not hasattr(ProductCondition, condition):
         return {'message': 'invalid product condition'}, 400
 
+    condition = ProductCondition(condition)
+
     if category_id == '':
         return {'message': 'category ID must be given'}, 400
 
@@ -53,19 +63,18 @@ def admin_page_save_product():
     if price <= 0:
         return {'message': 'price must be a positive integer'}, 400
 
+    new_signature = hashlib.sha256(('%s%s%s' % (product_name, category_id, condition)).encode('utf-8')).hexdigest()
+    old_signature = hashlib.sha256(('%s%s%s' % (product.name, product.category_id, product.condition)).encode('utf-8')).hexdigest()
+
     existing = db.execute(select(Product).where(
         Product.name == product_name,
         Product.category_id == category_id,
         Product.condition == condition
     )).scalar()
-    if existing != None:
-        return {'message': 'product with existing name, category, and condition already exists'}, 403
 
-    if request.method == 'POST':
-        product = Product()
-    else:
-        if product.seller_id != user.id:
-            return {'message': 'invalid seller'}, 403
+    if existing != None:
+        if (request.method == 'POST') or ((request.method == 'PUT') and (new_signature != old_signature)):
+            return {'message': 'product with existing name, category, and condition already exists'}, 403
 
     product.seller_id = user.id
     product.category_id = category_id
@@ -77,18 +86,54 @@ def admin_page_save_product():
     db.add(product)
     db.commit()
 
+    removed_images = set()
+    existing_image_regex = '/image/([0-9a-f\-]+)'
+
     if request.method == 'PUT':
+        old_images = db.execute(select(ProductImage).where(ProductImage.product_id == product_id)).scalars()
+        for image in old_images:
+            removed_images.add(image.path)
+
+        for image in images:
+            match = re.match(existing_image_regex, image)
+            if match != None:
+                blob = match[1]
+                if blob in removed_images:
+                    removed_images.remove(blob)
+
+        for blob in removed_images:
+            delete_blob(blob)
+
         db.execute(delete(ProductImage).where(ProductImage.product_id == product_id))
         db.commit()
 
-    for i, image in enumerate(images):
-        product_image = ProductImage(
-            product_id = product.id,
-            order = i + 1,
-            path = image
-        )
+    order = 1
+    for image in images:
+        match = re.match(existing_image_regex, image)
+        if match != None:
+            blob = match[1]
+            product_image = ProductImage(
+                product_id = product.id,
+                order = order,
+                path = blob
+            )
 
-        db.add(product_image)
-        db.commit()
+            db.add(product_image)
+            db.commit()
+
+            order += 1
+        else:
+            blob = save_encoded_blob(image)
+            if blob != None:
+                product_image = ProductImage(
+                    product_id = product.id,
+                    order = order,
+                    path = blob
+                )
+
+                db.add(product_image)
+                db.commit()
+
+                order += 1
 
     return {'message': 'product saved successfully'}, 200

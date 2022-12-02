@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String, Text, UniqueConstraint
+from sqlalchemy import Boolean, Column, DateTime, Enum, ForeignKey, Integer, String, Text, UniqueConstraint
 from sqlalchemy.schema import FetchedValue
 from sqlalchemy.orm import relationship
 
@@ -14,6 +14,7 @@ class Product(Model):
     description = Column('description', Text, nullable = False)
     condition = Column('condition', Enum(ProductCondition), nullable = False)
     price = Column('price', Integer, nullable = False)
+    created_at = Column('created_at', DateTime, nullable = False, server_default = FetchedValue())
     is_deleted = Column('is_deleted', Boolean, nullable = False, server_default = FetchedValue())
 
     seller = relationship('Seller')
