@@ -26,12 +26,14 @@ def product_detail_page_get_product_details(product_id):
     images = db.execute(select(ProductImage).where(ProductImage.product_id == product_id).order_by(ProductImage.order)).scalars()
 
     return {
-        'id': str(product.id),
-        'title': product.name,
-        'size': ['s', 'm', 'l', 'xl'],
-        'product_detail': product.description,
-        'price': product.price,
-        'images_url': [get_image_url(image.path) for image in images],
-        'category_id': product.category_id,
-        'category_name': product.category_name
+        'data': {
+            'id': str(product.id),
+            'title': product.name,
+            'size': ['s', 'm', 'l', 'xl'],
+            'product_detail': product.description,
+            'price': product.price,
+            'images_url': [get_image_url(image.path) for image in images],
+            'category_id': product.category_id,
+            'category_name': product.category_name
+        }
     }, 200

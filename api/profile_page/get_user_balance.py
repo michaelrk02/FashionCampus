@@ -18,4 +18,8 @@ def profile_page_get_user_balance():
     if buyer == None:
         return {'message': 'you are not a buyer'}, 403
 
-    return {'balance': buyer.balance}, 200
+    return {
+        'data': {
+            'balance': buyer.balance
+        }
+    }, 200

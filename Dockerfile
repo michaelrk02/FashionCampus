@@ -10,12 +10,12 @@ RUN python -m pip install -r requirements.torch.txt --extra-index-url https://do
 COPY requirements.nn.txt .
 RUN python -m pip install -r requirements.nn.txt
 
-COPY requirements.txt .
-RUN python -m pip install -r requirements.txt
-
 RUN apt update
 RUN apt install -y libgl1
 RUN apt install -y libglib2.0-0
+
+COPY requirements.txt .
+RUN python -m pip install -r requirements.txt
 
 COPY . .
 

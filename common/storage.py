@@ -11,12 +11,13 @@ def get_blob_path(blob):
 def save_blob(data):
     filename = str(uuid.uuid4())
 
-    f = open(get_blob_path(filename), 'wb')
-    if f == None:
-        return None
+    try:
+        f = open(get_blob_path(filename), 'wb')
 
-    f.write(data)
-    f.close()
+        f.write(data)
+        f.close()
+    except:
+        return None
 
     return filename
 

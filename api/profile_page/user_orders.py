@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from FashionCampus.database import session
 from FashionCampus.common import get_image_url, get_user
-from FashionCampus.model import Order, OrderItem, Product, ProductImage
+from FashionCampus.model import Order, OrderItem, Product, ProductImage, enum_describe
 
 from FashionCampus.api.blueprints import profile_page
 
@@ -53,7 +53,7 @@ def profile_page_user_orders():
                 'id': order.id,
                 'created_at': order.created_at,
                 'products': order_items[order.id],
-                'shipping_method': order.shipping_method,
+                'shipping_method': enum_describe(order.shipping_method),
                 'shipping_address': order.shipping_address
             } for order in orders
         ]

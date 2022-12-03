@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 
 from FashionCampus.api.blueprints import universal as bp_universal
 from FashionCampus.api.blueprints import home as bp_home
@@ -19,6 +20,7 @@ import FashionCampus.api.profile_page
 import FashionCampus.api.admin_page
 
 app = Flask(__name__)
+CORS(app)
 
 app.register_blueprint(bp_universal)
 app.register_blueprint(bp_home)

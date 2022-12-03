@@ -1,6 +1,7 @@
 import random
 
 from FashionCampus.database import session
+from FashionCampus.common import delete_blob
 from FashionCampus.model import Buyer, CartItem, Category, Order, OrderItem, Product, ProductImage, Seller, User
 
 from .user import create_user
@@ -10,6 +11,14 @@ from .order import add_to_cart, create_order
 print('Seeding database ...')
 
 db = session()
+
+#
+# Reset all images
+#
+
+product_images = db.query(ProductImage).all()
+for image in product_images:
+    delete_blob(image.path)
 
 #
 # Reset all tables
@@ -44,8 +53,21 @@ for _ in range(4):
 
 print('Generating products ...')
 
-for _ in range(4):
-    create_category(db)
+category_names = [
+    'T-shirt',
+    'Trouser',
+    'Pullover',
+    'Dress',
+    'Coat',
+    'Sandal',
+    'Shirt',
+    'Sneakers',
+    'Bag',
+    'Ankle Boot'
+]
+
+for name in category_names:
+    create_category(db, name)
 
 sellers = db.query(Seller).all()
 categories = db.query(Category).all()

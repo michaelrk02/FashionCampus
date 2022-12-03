@@ -18,4 +18,8 @@ def admin_page_get_total_sales():
     if seller == None:
         return {'message': 'you are not a seller'}, 403
 
-    return {'total': seller.sales}, 200
+    return {
+        'data': {
+            'total': seller.sales
+        }
+    }, 200

@@ -1,5 +1,14 @@
 version: "3"
 services:
+    fashion-campus-app:
+        container_name: "fashion-campus-app"
+        build: "smart-campus-template"
+        image: "michaelrk02/fashion-campus-app"
+        ports:
+            - "3000:3000"
+        networks:
+            - "fashion-campus"
+
     fashion-campus-api:
         container_name: "fashion-campus-api"
         build: "."
@@ -21,6 +30,7 @@ services:
             - "fashion-campus-db"
         networks:
             - "fashion-campus"
+
     fashion-campus-db:
         container_name: "fashion-campus-db"
         build: "database"

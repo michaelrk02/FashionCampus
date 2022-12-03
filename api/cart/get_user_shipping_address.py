@@ -19,9 +19,11 @@ def cart_get_user_shipping_address():
         return {'message': 'you are not a buyer'}, 403
 
     return {
-        'id': user.id,
-        'name': buyer.shipping_address['name'],
-        'phone_number': buyer.shipping_address['phone_number'],
-        'address': buyer.shipping_address['address'],
-        'city': buyer.shipping_address['city']
+        'data': {
+            'id': user.id,
+            'name': buyer.shipping_address['name'],
+            'phone_number': buyer.shipping_address['phone_number'],
+            'address': buyer.shipping_address['address'],
+            'city': buyer.shipping_address['city']
+        }
     }, 200

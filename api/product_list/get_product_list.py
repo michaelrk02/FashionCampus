@@ -26,9 +26,9 @@ def product_list_get_product_list():
     page = int(request.args.get('page', 1))
     page_size = int(request.args.get('page_size', 15))
     sort_by = request.args.get('sort_by', '')
-    category = request.args.get('category', '')
+    categories = request.args.get('category', '').split(',')
     price = request.args.get('price', '')
-    condition = request.args.get('condition', '')
+    conditions = request.args.get('condition', '').split(',')
     product_name = request.args.get('product_name', '')
 
     stmt = stmt.limit(page_size).offset((page - 1) * page_size)
@@ -42,15 +42,19 @@ def product_list_get_product_list():
     if sort_by == 'Price z_a':
         stmt = stmt.order_by(Product.price.desc())
 
-    if category != '':
-        stmt = stmt.where(Product.category_id == category)
+    if categories[0] != '':
+        stmt = stmt.where(Product.category_id.in_(categories))
 
     if price != '':
         range = price.split(',')
         stmt = stmt.where(Product.price >= int(range[0]), Product.price <= int(range[1]))
 
-    if condition != '':
-        stmt = stmt.where(Product.condition == condition)
+    if conditions[0] != '':
+        stmt = stmt.where(Product.condition.in_(conditions))
+
+    # frontend fix
+    if product_name == 'undefined':
+        product_name = ''
 
     stmt = stmt.where(Product.name.ilike('%%%s%%' % (product_name)))
 

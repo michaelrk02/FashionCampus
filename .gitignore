@@ -7,3 +7,7 @@ __pycache__
 
 /nn/data/**
 !/nn/data/.gitkeep
+
+/blob/*
+!/blob/.gitkeep
+!/blob/named

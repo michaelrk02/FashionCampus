@@ -14,7 +14,9 @@ def profile_page_user_details():
         return {'message': 'unauthorized user'}, 401
 
     return {
-        'name': user.name,
-        'email': user.email,
-        'phone_number': user.phone_number
+        'data': {
+            'name': user.name,
+            'email': user.email,
+            'phone_number': user.phone_number
+        }
     }, 200

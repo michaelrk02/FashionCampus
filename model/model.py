@@ -15,8 +15,8 @@ class ProductSize(str, enum.Enum):
     xl = 'xl'
 
 class ProductCondition(str, enum.Enum):
-    old = 'old'
     new = 'new'
+    used = 'used'
 
 class ShippingMethod(str, enum.Enum):
     regular = 'regular'
