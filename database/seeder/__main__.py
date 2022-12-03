@@ -73,10 +73,10 @@ sellers = db.query(Seller).all()
 categories = db.query(Category).all()
 
 for s in sellers:
-    for _ in range(2):
+    for _ in range(5):
         create_product(db, s.user_id, random.choice(categories).id, False)
 
-    for _ in range(6):
+    for _ in range(15):
         create_product(db, s.user_id, random.choice(categories).id, True)
 
 #
