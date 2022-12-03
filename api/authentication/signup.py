@@ -2,6 +2,8 @@ import re
 
 from flask import request
 
+from sqlalchemy import select
+
 from FashionCampus.api.blueprints import authentication
 
 from FashionCampus.database import session
@@ -48,6 +50,10 @@ def authentication_signup():
         return {'message': 'password should contain a number'}, 400
 
     password_hash, password_salt = password_make(password)
+
+    existing = db.execute(select(User).where(User.email == email)).scalar()
+    if existing != None:
+        return {'message': 'user with that e-mail already exists'}, 400
 
     user = User(
         name = name,

@@ -15,13 +15,13 @@ from FashionCampus.model import User
 def authentication_signin():
     db = session()
 
-    email = request.json.get('email')
-    password = request.json.get('password')
+    email = request.json.get('email', '')
+    password = request.json.get('password', '')
 
-    if email == None:
+    if email == '':
         return {'message': 'email must be given'}, 400
 
-    if password == None:
+    if password == '':
         return {'message': 'password must be given'}, 400
 
     user = db.execute(select(User).where(User.email == email)).scalar()
