@@ -18,7 +18,7 @@ def profile_page_topup_balance():
     if buyer == None:
         return {'message': 'you are not a buyer'}, 403
 
-    amount = int(request.args.get('amount', 0))
+    amount = int(request.json.get('amount', 0))
     if amount <= 0:
         return {'message': 'amount must be a positive integer'}, 400
 

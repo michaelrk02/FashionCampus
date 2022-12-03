@@ -19,7 +19,7 @@ def product_detail_page_get_product_details(product_id):
         Product.price,
         Product.category_id,
         Category.name.label('category_name')
-    ).join(Product.category).where(Product.id == product_id)).fetchone()
+    ).join(Product.category).where(Product.id == product_id, Product.is_deleted == False)).fetchone()
     if product == None:
         return {'message': 'product not found'}, 404
 

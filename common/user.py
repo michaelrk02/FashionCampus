@@ -31,7 +31,7 @@ def check_address(name, phone_number, address, city):
     if phone_number == '':
         return 'address phone number must be given'
 
-    if not re.match('^[0-9+()\-\s]+$', phone_number):
+    if not re.match('^[0-9+()\-\s.x]+$', phone_number):
         return 'address phone number must be a valid format'
 
     if address == '':

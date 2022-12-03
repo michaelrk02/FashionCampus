@@ -31,7 +31,7 @@ def authentication_signup():
     if phone_number == '':
         return {'message': 'phone number must be given'}, 400
 
-    if not re.match('^[0-9+()\-\s]+$', phone_number):
+    if not re.match('^[0-9+()\-\s.x]+$', phone_number):
         return {'message': 'phone number must be valid'}, 400
 
     if password == '':

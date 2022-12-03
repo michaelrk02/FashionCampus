@@ -27,6 +27,8 @@ def admin_page_save_category_handler(category_id = ''):
         category = db.get(Category, category_id)
         if (category == None) or category.is_deleted:
             return {'message': 'category not found or has been deleted'}, 404
+    else:
+        category = Category()
 
     category_name = request.json.get('category_name', '')
 
@@ -34,13 +36,11 @@ def admin_page_save_category_handler(category_id = ''):
         return {'message': 'category name must be given'}, 400
 
     existing = db.execute(select(Category).where(
-        Category.name == category_name
+        Category.name == category_name,
+        Category.id != category_id if request.method == 'PUT' else True
     )).scalar()
     if existing != None:
         return {'message': 'category with existing name already exists'}, 403
-
-    if request.method == 'POST':
-        category = Category()
 
     category.name = category_name
 

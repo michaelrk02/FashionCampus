@@ -22,11 +22,18 @@ def product_list_search_product_by_image():
         return {'message': 'unable to create temporary image. please check whether the file is correct'}, 400
 
     prediction = predict(get_blob_path(blob))
+    if prediction == None:
+        delete_blob(blob)
+        return {'message': 'unable to predict. please check whether it is a valid image file'}, 400
+
     delete_blob(blob)
 
-    category = db.execute(select(Category).where(Category.name == prediction)).scalar()
+    category = db.execute(select(Category).where(Category.name == prediction, Category.is_deleted == False)).scalar()
+    if category == None:
+        return {'message': 'category %s not found' % (prediction)}, 404
 
     return {
-        'category_id': category.id if category != None else None,
+        'category_id': category.id,
+        'category': category.id, # frontend fix
         '_label': prediction
-    }
+    }, 200

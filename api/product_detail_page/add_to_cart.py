@@ -4,7 +4,7 @@ from sqlalchemy import select
 
 from FashionCampus.database import session
 from FashionCampus.common import get_user
-from FashionCampus.model import CartItem, ProductSize
+from FashionCampus.model import CartItem, Product, ProductSize
 
 from FashionCampus.api.blueprints import product_detail_page
 
@@ -31,6 +31,10 @@ def product_detail_page_add_to_cart():
 
     if not hasattr(ProductSize, size):
         return {'message': 'invalid product size'}, 400
+
+    product = db.execute(select(Product).where(Product.id == product_id, Product.is_deleted == False)).scalar()
+    if product == None:
+        return {'message': 'product not found'}, 404
 
     cart_item = db.execute(select(CartItem).where(CartItem.buyer_id == user.id, CartItem.product_id == product_id, CartItem.details_size == size)).scalar()
     if cart_item == None:

@@ -8,6 +8,9 @@ from FashionCampus.nn.model import model
 
 def predict(path):
     image = load_image(path)
+    if image is None:
+        return None
+
     image = process_image(image, to_tensor = True)
     test = Variable(image.view(1, 1, 28, 28))
     output = model(test)

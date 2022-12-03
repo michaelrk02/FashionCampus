@@ -63,18 +63,15 @@ def admin_page_save_product():
     if price <= 0:
         return {'message': 'price must be a positive integer'}, 400
 
-    new_signature = hashlib.sha256(('%s%s%s' % (product_name, category_id, condition)).encode('utf-8')).hexdigest()
-    old_signature = hashlib.sha256(('%s%s%s' % (product.name, product.category_id, product.condition)).encode('utf-8')).hexdigest()
-
     existing = db.execute(select(Product).where(
         Product.name == product_name,
         Product.category_id == category_id,
-        Product.condition == condition
+        Product.condition == condition,
+        Product.id != product_id if request.method == 'PUT' else True
     )).scalar()
 
     if existing != None:
-        if (request.method == 'POST') or ((request.method == 'PUT') and (new_signature != old_signature)):
-            return {'message': 'product with existing name, category, and condition already exists'}, 403
+        return {'message': 'product with existing name, category, and condition already exists'}, 403
 
     product.seller_id = user.id
     product.category_id = category_id
