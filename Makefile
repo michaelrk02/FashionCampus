@@ -20,4 +20,4 @@ logs:
 
 .PHONY : test
 test:
-	docker-compose exec fashion-campus-api python -m FashionCampus.nn.test
+	docker-compose exec fashion-campus-api python -m FashionCampus.nn.main

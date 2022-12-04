@@ -1,19 +1,21 @@
-import torch
+import cv2
 
-from torch.autograd import Variable
+from FashionCampus.nn.preprocessing import PreProcessing
+from FashionCampus.nn.model import MobileNetCNNModel
+from FashionCampus.nn.postprocessing import PostProcessing
+from FashionCampus.nn.inference import Inference
 
-from FashionCampus.nn.loader import load_image, output_label
-from FashionCampus.nn.preprocessor import process_image
-from FashionCampus.nn.model import model
+MODEL_PATH = "./nn/data/MobileNetCNN_epo5_model.pth"
 
 def predict(path):
-    image = load_image(path)
-    if image is None:
-        return None
+    pre_proc = PreProcessing()
+    model = MobileNetCNNModel(MODEL_PATH)
+    inf = Inference(model.model)
+    post_proc = PostProcessing()
 
-    image = process_image(image, to_tensor = True)
-    test = Variable(image.view(1, 1, 28, 28))
-    output = model(test)
-    prediction = torch.max(output, 1)[1]
-    label = output_label(prediction)
-    return label
+    image = cv2.imread(path)
+    image = pre_proc.process(image)
+    result = inf.infer(image)
+    prediction = post_proc.predict(result)
+
+    return prediction
